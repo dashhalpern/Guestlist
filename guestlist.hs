@@ -1,11 +1,14 @@
+module Guestlist where
+
 type Name = String
 type Fun = Int
 
-main = putStrLn "Hello World"
 
 data Employee = Emp { empName :: Name, empFun :: Fun }
   deriving (Show)
 
+data Guestlister = Guesty [Employee] Int
+  deriving (Show)
 
 data GuestList = Guests ([Employee] , Int)
   deriving (Show)
@@ -45,7 +48,7 @@ treeFold b f (Node a []) = f a [b]
 treeFold b f (Node a n) = f a (map (treeFold b f) n)
 
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel a b =   (addleft a (sumswitch b))
+nextLevel a b =   replace (addleft a (switch(sumswitch b)))
 
 replace :: (GuestList, GuestList) -> (GuestList, GuestList)
 replace (b, c) = if (getfun c > getfun b)
@@ -57,7 +60,7 @@ addleft a (b,c) = (glCons a b, c)
 
 sumswitch:: [(GuestList, GuestList)] -> (GuestList, GuestList)
 sumswitch [] = ( Guests ([], 0), Guests ([], 0) )
-sumswitch ((a,b) : c) = switch (add (a, b) (sumswitch c))
+sumswitch ((a,b) : c) =  (add (a, b) (sumswitch c))
 
 add :: (GuestList, GuestList) -> (GuestList, GuestList) -> (GuestList, GuestList)
 add (a, b) (c, d) = (mappend a c,mappend b d)
